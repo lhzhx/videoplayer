@@ -1,0 +1,155 @@
+<svg width="900" height="700" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <style>
+      .start { fill: #4caf50; stroke: #2e7d32; stroke-width: 2; }
+      .process { fill: #2196f3; stroke: #1565c0; stroke-width: 2; }
+      .decision { fill: #ff9800; stroke: #ef6c00; stroke-width: 2; }
+      .end { fill: #f44336; stroke: #c62828; stroke-width: 2; }
+      .data { fill: #9c27b0; stroke: #6a1b9a; stroke-width: 2; }
+      .text { font-family: Arial, sans-serif; font-size: 11px; text-anchor: middle; fill: white; font-weight: bold; }
+      .small-text { font-family: Arial, sans-serif; font-size: 9px; text-anchor: middle; fill: white; }
+      .title { font-family: Arial, sans-serif; font-size: 18px; font-weight: bold; text-anchor: middle; fill: #333; }
+      .arrow { stroke: #333; stroke-width: 2; fill: none; marker-end: url(#arrowhead); }
+      .label { font-family: Arial, sans-serif; font-size: 10px; text-anchor: middle; fill: #333; }
+    </style>
+    <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#333" />
+    </marker>
+  </defs>
+  
+  <!-- Title -->
+  <text x="450" y="30" class="title">AudioDecoder 解码器工作流程图</text>
+  
+  <!-- Start -->
+  <ellipse cx="450" cy="80" rx="60" ry="25" class="start"/>
+  <text x="450" y="85" class="text">开始解码线程</text>
+  
+  <!-- Initialize Decoder -->
+  <rect x="375" y="130" width="150" height="40" class="process" rx="5"/>
+  <text x="450" y="145" class="text">初始化FFmpeg解码器</text>
+  <text x="450" y="160" class="small-text">avcodec_alloc_context3</text>
+  
+  <!-- Initialize Resampler -->
+  <rect x="375" y="190" width="150" height="40" class="process" rx="5"/>
+  <text x="450" y="205" class="text">初始化重采样器</text>
+  <text x="450" y="220" class="small-text">swr_alloc_set_opts</text>
+  
+  <!-- Main Loop Start -->
+  <rect x="375" y="250" width="150" height="30" class="decision" rx="5"/>
+  <text x="450" y="270" class="text">检查线程状态</text>
+  
+  <!-- Check Stop -->
+  <polygon points="350,310 450,290 550,310 450,330" class="decision"/>
+  <text x="450" y="315" class="text">shouldStop?</text>
+  
+  <!-- Get Packet -->
+  <rect x="200" y="370" width="120" height="40" class="process" rx="5"/>
+  <text x="260" y="385" class="text">从队列获取包</text>
+  <text x="260" y="400" class="small-text">packetQueue->get()</text>
+  
+  <!-- Check Packet Valid -->
+  <polygon points="180,440 260,420 340,440 260,460" class="decision"/>
+  <text x="260" y="445" class="text">包有效?</text>
+  
+  <!-- Decode Packet -->
+  <rect x="200" y="500" width="120" height="40" class="process" rx="5"/>
+  <text x="260" y="515" class="text">解码音频包</text>
+  <text x="260" y="530" class="small-text">avcodec_send_packet</text>
+  
+  <!-- Receive Frame -->
+  <rect x="200" y="560" width="120" height="40" class="process" rx="5"/>
+  <text x="260" y="575" class="text">接收解码帧</text>
+  <text x="260" y="590" class="small-text">avcodec_receive_frame</text>
+  
+  <!-- Check Frame Valid -->
+  <polygon points="180,630 260,610 340,630 260,650" class="decision"/>
+  <text x="260" y="635" class="text">帧有效?</text>
+  
+  <!-- Resample -->
+  <rect x="400" y="560" width="120" height="40" class="data" rx="5"/>
+  <text x="460" y="575" class="text">重采样处理</text>
+  <text x="460" y="590" class="small-text">swr_convert</text>
+  
+  <!-- Write to Buffer -->
+  <rect x="400" y="500" width="120" height="40" class="data" rx="5"/>
+  <text x="460" y="515" class="text">写入环形缓冲区</text>
+  <text x="460" y="530" class="small-text">audioRingBuffer->write</text>
+  
+  <!-- Sleep/Wait -->
+  <rect x="600" y="370" width="100" height="40" class="process" rx="5"/>
+  <text x="650" y="385" class="text">等待/休眠</text>
+  <text x="650" y="400" class="small-text">10ms</text>
+  
+  <!-- Cleanup -->
+  <rect x="600" y="290" width="120" height="40" class="end" rx="5"/>
+  <text x="660" y="305" class="text">清理资源</text>
+  <text x="660" y="320" class="small-text">释放解码器和重采样器</text>
+  
+  <!-- End -->
+  <ellipse cx="660" cy="380" rx="50" ry="25" class="end"/>
+  <text x="660" y="385" class="text">线程结束</text>
+  
+  <!-- Arrows -->
+  <line x1="450" y1="105" x2="450" y2="125" class="arrow"/>
+  <line x1="450" y1="170" x2="450" y2="185" class="arrow"/>
+  <line x1="450" y1="230" x2="450" y2="245" class="arrow"/>
+  <line x1="450" y1="280" x2="450" y2="290" class="arrow"/>
+  
+  <!-- No - continue loop -->
+  <line x1="350" y1="310" x2="260" y2="310" class="arrow"/>
+  <line x1="260" y1="310" x2="260" y2="365" class="arrow"/>
+  <text x="300" y="305" class="label">否</text>
+  
+  <!-- Yes - stop -->
+  <line x1="550" y1="310" x2="595" y2="310" class="arrow"/>
+  <text x="570" y="305" class="label">是</text>
+  
+  <!-- Packet flow -->
+  <line x1="260" y1="410" x2="260" y2="420" class="arrow"/>
+  <line x1="260" y1="460" x2="260" y2="495" class="arrow"/>
+  <text x="300" y="455" class="label">是</text>
+  
+  <!-- Invalid packet -->
+  <line x1="180" y1="440" x2="120" y2="440" class="arrow"/>
+  <line x1="120" y1="440" x2="120" y2="265" class="arrow"/>
+  <line x1="120" y1="265" x2="370" y2="265" class="arrow"/>
+  <text x="140" y="435" class="label">否</text>
+  
+  <!-- Frame processing -->
+  <line x1="260" y1="540" x2="260" y2="555" class="arrow"/>
+  <line x1="260" y1="600" x2="260" y2="610" class="arrow"/>
+  
+  <!-- Valid frame -->
+  <line x1="340" y1="630" x2="460" y2="630" class="arrow"/>
+  <line x1="460" y1="630" x2="460" y2="600" class="arrow"/>
+  <text x="380" y="625" class="label">是</text>
+  
+  <!-- Resample to buffer -->
+  <line x1="460" y1="560" x2="460" y2="540" class="arrow"/>
+  
+  <!-- Back to loop -->
+  <line x1="460" y1="500" x2="460" y2="480" class="arrow"/>
+  <line x1="460" y1="480" x2="80" y2="480" class="arrow"/>
+  <line x1="80" y1="480" x2="80" y2="265" class="arrow"/>
+  <line x1="80" y1="265" x2="370" y2="265" class="arrow"/>
+  
+  <!-- Invalid frame back to loop -->
+  <line x1="180" y1="630" x2="80" y2="630" class="arrow"/>
+  <line x1="80" y1="630" x2="80" y2="265" class="arrow"/>
+  <text x="140" y="625" class="label">否</text>
+  
+  <!-- No packet available -->
+  <line x1="340" y1="440" x2="650" y2="440" class="arrow"/>
+  <line x1="650" y1="440" x2="650" y2="410" class="arrow"/>
+  <text x="480" y="435" class="label">无包可用</text>
+  
+  <!-- Sleep back to loop -->
+  <line x1="650" y1="370" x2="650" y2="350" class="arrow"/>
+  <line x1="650" y1="350" x2="40" y2="350" class="arrow"/>
+  <line x1="40" y1="350" x2="40" y2="265" class="arrow"/>
+  <line x1="40" y1="265" x2="370" y2="265" class="arrow"/>
+  
+  <!-- Cleanup to end -->
+  <line x1="660" y1="330" x2="660" y2="355" class="arrow"/>
+  
+</svg>

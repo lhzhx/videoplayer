@@ -1,0 +1,11 @@
+{
+    "files.associations": {
+        "*.dbclient-js": "javascript",
+        "chrono": "cpp",
+        "*.tcc": "cpp",
+        "ostream": "cpp",
+        "mutex": "cpp",
+        "condition_variable": "cpp",
+        "atomic": "cpp"
+    }
+}

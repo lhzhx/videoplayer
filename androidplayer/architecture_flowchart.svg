@@ -1,0 +1,196 @@
+<svg width="1200" height="800" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <style>
+      .title { font-family: Arial, sans-serif; font-size: 18px; font-weight: bold; fill: #2c3e50; }
+      .layer-title { font-family: Arial, sans-serif; font-size: 14px; font-weight: bold; fill: #34495e; }
+      .component { font-family: Arial, sans-serif; font-size: 12px; fill: #2c3e50; }
+      .thread { font-family: Arial, sans-serif; font-size: 10px; fill: #7f8c8d; }
+      .data-flow { stroke: #3498db; stroke-width: 2; fill: none; marker-end: url(#arrowhead); }
+      .control-flow { stroke: #e74c3c; stroke-width: 2; fill: none; marker-end: url(#arrowhead); stroke-dasharray: 5,5; }
+      .layer-bg { fill: #ecf0f1; stroke: #bdc3c7; stroke-width: 1; }
+      .component-bg { fill: #ffffff; stroke: #34495e; stroke-width: 1; rx: 5; }
+      .queue-bg { fill: #f39c12; stroke: #e67e22; stroke-width: 2; rx: 8; }
+      .decoder-bg { fill: #2ecc71; stroke: #27ae60; stroke-width: 2; rx: 8; }
+      .render-bg { fill: #9b59b6; stroke: #8e44ad; stroke-width: 2; rx: 8; }
+    </style>
+    <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#3498db" />
+    </marker>
+  </defs>
+  
+  <!-- 标题 -->
+  <text x="600" y="25" text-anchor="middle" class="title">Android音视频播放器架构流程图</text>
+  
+  <!-- Java UI层 -->
+  <rect x="50" y="50" width="1100" height="80" class="layer-bg"/>
+  <text x="70" y="70" class="layer-title">Java UI层</text>
+  
+  <!-- MainActivity -->
+  <rect x="100" y="80" width="120" height="40" class="component-bg"/>
+  <text x="160" y="95" text-anchor="middle" class="component">MainActivity</text>
+  <text x="160" y="110" text-anchor="middle" class="thread">主线程</text>
+  
+  <!-- Player -->
+  <rect x="250" y="80" width="120" height="40" class="component-bg"/>
+  <text x="310" y="95" text-anchor="middle" class="component">Player</text>
+  <text x="310" y="110" text-anchor="middle" class="thread">状态管理</text>
+  
+  <!-- Progress Thread -->
+  <rect x="400" y="80" width="120" height="40" class="component-bg"/>
+  <text x="460" y="95" text-anchor="middle" class="component">Progress Thread</text>
+  <text x="460" y="110" text-anchor="middle" class="thread">进度更新线程</text>
+  
+  <!-- JNI接口层 -->
+  <rect x="50" y="150" width="1100" height="60" class="layer-bg"/>
+  <text x="70" y="170" class="layer-title">JNI接口层</text>
+  
+  <!-- play.cpp -->
+  <rect x="400" y="175" width="400" height="30" class="component-bg"/>
+  <text x="600" y="195" text-anchor="middle" class="component">play.cpp (JNI Functions)</text>
+  
+  <!-- C++核心层 -->
+  <rect x="50" y="230" width="1100" height="450" class="layer-bg"/>
+  <text x="70" y="250" class="layer-title">C++核心层</text>
+  
+  <!-- 解复用层 -->
+  <rect x="100" y="270" width="150" height="60" class="decoder-bg"/>
+  <text x="175" y="290" text-anchor="middle" class="component">Demuxer</text>
+  <text x="175" y="305" text-anchor="middle" class="component">媒体文件解析</text>
+  <text x="175" y="320" text-anchor="middle" class="thread">解复用线程</text>
+  
+  <!-- 数据包队列 -->
+  <rect x="300" y="260" width="120" height="40" class="queue-bg"/>
+  <text x="360" y="275" text-anchor="middle" class="component">VideoPacketQueue</text>
+  <text x="360" y="290" text-anchor="middle" class="thread">视频数据包</text>
+  
+  <rect x="300" y="310" width="120" height="40" class="queue-bg"/>
+  <text x="360" y="325" text-anchor="middle" class="component">AudioPacketQueue</text>
+  <text x="360" y="340" text-anchor="middle" class="thread">音频数据包</text>
+  
+  <!-- 解码器 -->
+  <rect x="470" y="260" width="120" height="40" class="decoder-bg"/>
+  <text x="530" y="275" text-anchor="middle" class="component">Videodecoder</text>
+  <text x="530" y="290" text-anchor="middle" class="thread">视频解码线程</text>
+  
+  <rect x="470" y="310" width="120" height="40" class="decoder-bg"/>
+  <text x="530" y="325" text-anchor="middle" class="component">AudioDecoder</text>
+  <text x="530" y="340" text-anchor="middle" class="thread">音频解码线程</text>
+  
+  <!-- 帧队列和缓冲区 -->
+  <rect x="640" y="260" width="120" height="40" class="queue-bg"/>
+  <text x="700" y="275" text-anchor="middle" class="component">VideoFrameQueue</text>
+  <text x="700" y="290" text-anchor="middle" class="thread">视频帧队列</text>
+  
+  <rect x="640" y="310" width="120" height="40" class="queue-bg"/>
+  <text x="700" y="325" text-anchor="middle" class="component">AudioRingBuffer</text>
+  <text x="700" y="340" text-anchor="middle" class="thread">音频环形缓冲</text>
+  
+  <!-- 渲染层 -->
+  <rect x="810" y="260" width="120" height="40" class="render-bg"/>
+  <text x="870" y="275" text-anchor="middle" class="component">Videorender</text>
+  <text x="870" y="290" text-anchor="middle" class="thread">视频渲染线程</text>
+  
+  <rect x="810" y="310" width="120" height="40" class="render-bg"/>
+  <text x="870" y="325" text-anchor="middle" class="component">AAudioRender</text>
+  <text x="870" y="340" text-anchor="middle" class="thread">音频回调线程</text>
+  
+  <!-- 输出设备 -->
+  <rect x="980" y="260" width="100" height="40" class="component-bg"/>
+  <text x="1030" y="275" text-anchor="middle" class="component">屏幕显示</text>
+  <text x="1030" y="290" text-anchor="middle" class="thread">OpenGL ES</text>
+  
+  <rect x="980" y="310" width="100" height="40" class="component-bg"/>
+  <text x="1030" y="325" text-anchor="middle" class="component">扬声器输出</text>
+  <text x="1030" y="340" text-anchor="middle" class="thread">AAudio API</text>
+  
+  <!-- 线程安全基础设施 -->
+  <rect x="100" y="380" width="1000" height="80" style="fill: #f8f9fa; stroke: #6c757d; stroke-width: 1; stroke-dasharray: 3,3;"/>
+  <text x="120" y="400" class="layer-title">线程安全基础设施</text>
+  
+  <rect x="150" y="410" width="150" height="30" class="component-bg"/>
+  <text x="225" y="430" text-anchor="middle" class="component">threadsafequeue&lt;T&gt;</text>
+  
+  <rect x="320" y="410" width="120" height="30" class="component-bg"/>
+  <text x="380" y="430" text-anchor="middle" class="component">std::mutex</text>
+  
+  <rect x="460" y="410" width="150" height="30" class="component-bg"/>
+  <text x="535" y="430" text-anchor="middle" class="component">condition_variable</text>
+  
+  <rect x="630" y="410" width="120" height="30" class="component-bg"/>
+  <text x="690" y="430" text-anchor="middle" class="component">atomic&lt;bool&gt;</text>
+  
+  <rect x="770" y="410" width="120" height="30" class="component-bg"/>
+  <text x="830" y="430" text-anchor="middle" class="component">RAII管理</text>
+  
+  <!-- 同步控制 -->
+  <rect x="100" y="480" width="1000" height="80" style="fill: #fff3cd; stroke: #ffc107; stroke-width: 1;"/>
+  <text x="120" y="500" class="layer-title">同步控制机制</text>
+  
+  <rect x="150" y="510" width="120" height="30" class="component-bg"/>
+  <text x="210" y="530" text-anchor="middle" class="component">shouldStop</text>
+  
+  <rect x="290" y="510" width="120" height="30" class="component-bg"/>
+  <text x="350" y="530" text-anchor="middle" class="component">isPaused</text>
+  
+  <rect x="430" y="510" width="120" height="30" class="component-bg"/>
+  <text x="490" y="530" text-anchor="middle" class="component">isSeeking</text>
+  
+  <rect x="570" y="510" width="120" height="30" class="component-bg"/>
+  <text x="630" y="530" text-anchor="middle" class="component">playback_speed</text>
+  
+  <rect x="710" y="510" width="120" height="30" class="component-bg"/>
+  <text x="770" y="530" text-anchor="middle" class="component">current_pts</text>
+  
+  <rect x="850" y="510" width="120" height="30" class="component-bg"/>
+  <text x="910" y="530" text-anchor="middle" class="component">last_valid_pts</text>
+  
+  <!-- FFmpeg底层 -->
+  <rect x="50" y="700" width="1100" height="60" class="layer-bg"/>
+  <text x="70" y="720" class="layer-title">FFmpeg底层</text>
+  
+  <rect x="200" y="725" width="120" height="30" class="component-bg"/>
+  <text x="260" y="745" text-anchor="middle" class="component">libavformat</text>
+  
+  <rect x="350" y="725" width="120" height="30" class="component-bg"/>
+  <text x="410" y="745" text-anchor="middle" class="component">libavcodec</text>
+  
+  <rect x="500" y="725" width="120" height="30" class="component-bg"/>
+  <text x="560" y="745" text-anchor="middle" class="component">libswresample</text>
+  
+  <rect x="650" y="725" width="120" height="30" class="component-bg"/>
+  <text x="710" y="745" text-anchor="middle" class="component">libavutil</text>
+  
+  <!-- 数据流箭头 -->
+  <!-- 视频数据流 -->
+  <path d="M 250 300 L 300 280" class="data-flow"/>
+  <path d="M 420 280 L 470 280" class="data-flow"/>
+  <path d="M 590 280 L 640 280" class="data-flow"/>
+  <path d="M 760 280 L 810 280" class="data-flow"/>
+  <path d="M 930 280 L 980 280" class="data-flow"/>
+  
+  <!-- 音频数据流 -->
+  <path d="M 250 320 L 300 330" class="data-flow"/>
+  <path d="M 420 330 L 470 330" class="data-flow"/>
+  <path d="M 590 330 L 640 330" class="data-flow"/>
+  <path d="M 760 330 L 810 330" class="data-flow"/>
+  <path d="M 930 330 L 980 330" class="data-flow"/>
+  
+  <!-- 控制流箭头 -->
+  <path d="M 310 120 L 600 175" class="control-flow"/>
+  <path d="M 460 120 L 600 175" class="control-flow"/>
+  
+  <!-- 数据流说明 -->
+  <text x="50" y="590" class="layer-title">数据流说明：</text>
+  <line x1="50" y1="600" x2="80" y2="600" class="data-flow"/>
+  <text x="90" y="605" class="component">音视频数据流</text>
+  
+  <line x1="200" y1="600" x2="230" y2="600" class="control-flow"/>
+  <text x="240" y="605" class="component">控制信号流</text>
+  
+  <!-- 关键特性说明 -->
+  <text x="50" y="630" class="layer-title">关键特性：</text>
+  <text x="50" y="650" class="component">• 多线程并行处理，音视频解码渲染异步执行</text>
+  <text x="50" y="665" class="component">• 生产者-消费者模式，使用线程安全队列缓冲数据</text>
+  <text x="50" y="680" class="component">• 原子变量和条件变量实现高效线程同步</text>
+  
+</svg>
