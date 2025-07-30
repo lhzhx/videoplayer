@@ -1,0 +1,3 @@
+/home/xiaolv/XIAOMI/projectall2/media_player/build/CMakeFiles/media_player.dir
+/home/xiaolv/XIAOMI/projectall2/media_player/build/CMakeFiles/edit_cache.dir
+/home/xiaolv/XIAOMI/projectall2/media_player/build/CMakeFiles/rebuild_cache.dir
